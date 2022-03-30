@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using ImageMagick;
 
 namespace ImageCropper.Controllers;
@@ -90,7 +91,18 @@ public class FileController : ControllerBase
         });
       }
     }
-    return ids.Count == 0 ? BadRequest("No valid images provided.") : Ok(ids);
+    // a whole json library, just for an array?
+    StringBuilder json = new StringBuilder("[");
+    for (int i = 0; i < ids.Count; i++)
+    {
+      json.Append("\"" + ids[i] + "\"");
+      if (i != ids.Count - 1)
+      {
+        json.Append(",");
+      }
+    }
+    json.Append("]");
+    return Ok(json.ToString());
   }
 
   [HttpGet("{guid}")]
@@ -102,6 +114,6 @@ public class FileController : ControllerBase
       return BadRequest("File not found.");
     }
     Stream s = file.OpenRead(); // disposed by return value
-    return File(s, "application/octet-stream");
+    return File(s, "application/octet-stream", file.Name);
   }
 }

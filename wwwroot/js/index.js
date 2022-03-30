@@ -1,4 +1,7 @@
 var form = $("#submission");
+
+var ids = [];
+
 form.submit(function (e) {
   e.preventDefault();
   $.ajax({
@@ -8,7 +11,24 @@ form.submit(function (e) {
     contentType: false,
     processData: false,
     success: function(data) {
-      console.log(data);
+      ids = JSON.parse(data);
+      show("downloadButton");
     }
   });
 });
+
+function show(el) {
+  document.getElementById(el).style.visibility = "visible";
+}
+
+function hide(el) {
+  document.getElementById(el).style.visibility = "hidden";
+}
+
+function download() {
+  var internal = document.getElementById("internal");
+  ids.forEach(id => {
+    internal.setAttribute("href", "crop/" + id);
+    internal.click();
+  });
+}
