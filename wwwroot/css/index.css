@@ -1,3 +1,11 @@
 .downloadButton {
   visibility: hidden;
 }
+
+.hidden {
+  display: none;
+}
+
+.pixelBox {
+  width: 50px;
+}
