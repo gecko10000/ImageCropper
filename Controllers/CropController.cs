@@ -64,8 +64,26 @@ public class FileController : ControllerBase
     }
   }
 
+  private static readonly Dictionary<string, Gravity> gravities = new Dictionary<string, Gravity>() {
+    {"top", Gravity.South},
+    {"left", Gravity.East},
+    {"bottom", Gravity.North},
+    {"right", Gravity.West}
+  };
+
+  private Gravity GetGravity(string side)
+  {
+    side = side.ToLower();
+    return gravities.GetValueOrDefault(side, Gravity.South);
+  }
+
+  private bool IsSide(Gravity g)
+  {
+    return g == Gravity.East || g == Gravity.West;
+  }
+
   [HttpPost]
-  public IActionResult Upload([FromForm] List<IFormFile> files)
+  public IActionResult Upload([FromForm] List<IFormFile> files, [FromForm] string side, [FromForm] int pixels)
   {
     MakeStorage();
     List<Guid> ids = new List<Guid>();
@@ -82,7 +100,12 @@ public class FileController : ControllerBase
         guid = Guid.NewGuid();
       } while (Retrieve(guid) is not null);
       MakeStorage(guid);
-      i.Crop(i.Width, i.Height - 20);
+      Gravity g = GetGravity(side);
+      if (IsSide(g)) {
+        i.Crop(i.Width - pixels, i.Height, g);
+      } else {
+        i.Crop(i.Width, i.Height - pixels, g);
+      }
       if (Write(guid, i, file.FileName))
       {
         ids.Add(guid);
