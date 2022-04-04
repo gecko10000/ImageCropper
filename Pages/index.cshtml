@@ -3,7 +3,16 @@
 <body>
   <div>
     <form id="submission" action="/crop" method="post" enctype="multipart/form-data">
-      <label for="files">Files:</label>
+      <label for="pixels">Crop the</label>
+      <input type="number" value=20 id="pixels" name="pixels" required>
+      <label for="side"></label>
+      <select id="side" name="side" required>
+        <option value="bottom" selected>bottom</option>
+        <option value="top">top</option>
+        <option value="left">left</option>
+        <option value="right">right</option>
+      </select>
+      <label for="files">pixels off the following files:</label>
       <input type="file" multiple id="files" name="files">
       <input type="submit" value="Crop">
     </form>

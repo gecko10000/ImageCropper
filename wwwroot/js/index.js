@@ -4,6 +4,7 @@ var ids = [];
 
 form.submit(function (e) {
   e.preventDefault();
+  hide("downloadButton");
   $.ajax({
     type: "POST",
     url: "/crop",
