@@ -13,7 +13,9 @@ form.submit(function (e) {
     processData: false,
     success: function(data) {
       ids = JSON.parse(data);
-      show("downloadButton");
+      if (ids.length > 0) {
+        show("downloadButton");
+      }
     }
   });
 });
