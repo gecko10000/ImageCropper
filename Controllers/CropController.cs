@@ -58,7 +58,9 @@ public class FileController : ControllerBase
 
   public static void DeleteAll()
   {
-    foreach (DirectoryInfo dir in new DirectoryInfo(DATA_DIR).EnumerateDirectories())
+    DirectoryInfo info = new DirectoryInfo(DATA_DIR);
+    if (!info.Exists) return;
+    foreach (DirectoryInfo dir in info.EnumerateDirectories())
     {
       dir.Delete(true);
     }
@@ -131,6 +133,7 @@ public class FileController : ControllerBase
   [HttpGet("{guid}")]
   public IActionResult Get(string guid)
   {
+    MakeStorage();
     FileInfo? file = Retrieve(Guid.Parse(guid));
     if (file is null)
     {
